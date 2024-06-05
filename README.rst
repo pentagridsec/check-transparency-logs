@@ -25,11 +25,11 @@ Installation
 Internal check
 ----------------
 
-* Identify where your local certs are stored. If you are using dehydrated, look into your config file, for example ''/etc/dehydrated/config''.
-  There check the setting ''CERTDIR'' and ''BASEDIR''. If there is nothing specific,
-  certificates may be stored locally in ''/etc/dehydrated/certs''.
+* Identify where your local certs are stored. If you are using dehydrated, look into your config file, for example
+  ``/etc/dehydrated/config``. There check the setting ``CERTDIR`` and ``BASEDIR``. If there is nothing specific,
+  certificates may be stored locally in ``/etc/dehydrated/certs``.
   
-* The check script will be run under a separate user ID. The user ''nobody'' does not work here,
+* The check script will be run under a separate user ID. The user ``nobody`` does not work here,
   because we need to store runtime files and these should not be written by other users. Hence, we are creating a new user:
 
 ::
@@ -52,7 +52,7 @@ Internal check
 
 * Obtain the certificates you trust and you use as trust anchors. Here, we use intermediate CA certificates, because we
   verify if a found certificate was signed by one of the trust anchors. If there is an intermediate certificate missing,
-  the signature verification will fail. The ''letsencryptauthorityx3.pem'' is expired, but you may still have some
+  the signature verification will fail. The ``letsencryptauthorityx3.pem`` is expired, but you may still have some
   certs, which have been signed by this certificate.
 
 ::
@@ -107,7 +107,8 @@ Internal check
 External check
 ----------------
 
-* Now, define the check command. Depending on your setup, edit for example `/etc/icinga2/conf.d/commands_check_ct_extern.conf`:
+* Now, define the check command. Depending on your setup, edit for example
+  ``/etc/icinga2/conf.d/commands_check_ct_extern.conf``:
 
 ::
 
@@ -127,9 +128,9 @@ External check
               "--imap-cleanup" ]
     }
 
-* Set up dedicated E-mail accounts. The flag `--imap-cleanup` instructs the plugin to remove all E-mails from the IMAP account.
+* Set up dedicated E-mail accounts. The flag ``--imap-cleanup`` instructs the plugin to remove all E-mails from the IMAP account.
 
-* Add a configuration file for Icinga, for example `/etc/icinga2/conf.d/services_mail_loop.conf`:
+* Add a configuration file for Icinga, for example ``/etc/icinga2/conf.d/services_mail_loop.conf``:
 
 ::
 
