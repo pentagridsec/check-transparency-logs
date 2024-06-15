@@ -175,19 +175,19 @@ def check_downloaded_cert(downloaded_cert: x509.Certificate,
     l = Logger()
     try:
 
-        l.log_debug("Check signature.")
+        l.log_msg("Check signature.")
         if not verify_cert_signature(downloaded_cert, expected_issuer_certs):
             msg = f"Failed to verify signature of certificate with fingerprint {get_cert_fingerprint_hex(downloaded_cert)}."
             l.log_wrn(msg)
             print_cert(downloaded_cert)
             raise InvalidSignature("SECURITY WARNING: " + msg)
 
-        l.log_debug("Check if it is a pre-cert.")
+        l.log_msg("Check if it is a pre-cert.")
         if is_pre_cert(downloaded_cert):
             l.log_msg(f"Certificate with fingerprint {get_cert_fingerprint_hex(downloaded_cert)} is the pre-certificate. Skipping.")
             return CertState.IGNORE
 
-        l.log_debug("Check if certificate is in local certificates.")
+        l.log_msg("Check if certificate is in local certificates.")
         if downloaded_cert.serial_number not in local_certs:
             l.log_msg("Downloaded certificate not found in local certificates.")
             if learn:
@@ -201,7 +201,7 @@ def check_downloaded_cert(downloaded_cert: x509.Certificate,
 
         local_cert = local_certs[downloaded_cert.serial_number]
 
-        l.log_debug("Check if certificate fingerprints match.")
+        l.log_msg("Check if certificate fingerprints match.")
         if downloaded_cert.fingerprint(hashes.SHA256()) != local_cert.fingerprint(hashes.SHA256()):
             msg = f"Local and downloaded version of certificate {downloaded_cert.serial_number:02x} have different fingerprints, but the same serial."
             l.log_wrn(msg)
