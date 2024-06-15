@@ -2,7 +2,7 @@ Introduction
 =============
 
 This directory contains check scripts to monitor certificates of your infrastructure with the aim of finding
-forged certificates. Forging certificates should be prevented in the first place. Therefore, using CAA DNS records in combination
+forged certificates. Forging certificates should be prevented in the first place. Therefor, using CAA DNS records in combination
 with ``accounturi`` property is recommended. It may not cover all situations, especially in the event of a rogue CA.
 
 The monitoring approach is two-fold: The external scan script ``check_ct_remote.py`` checks a service's
