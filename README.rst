@@ -60,15 +60,22 @@ Internal check
     mkdir $INSTALLDIR/trusted-certs
     cd $INSTALLDIR/trusted-certs
     wget https://letsencrypt.org/certs/lets-encrypt-r3.pem
-    wget https://letsencrypt.org/certs/letsencryptauthorityx3.pem
+    wget https://letsencrypt.org/certs/2024/e5.pem
+    wget https://letsencrypt.org/certs/2024/e6.pem
+    wget https://letsencrypt.org/certs/2024/r10.pem
+    wget https://letsencrypt.org/certs/2024/r11.pem
 
 * Check hashes:
 
 ::
    
     sha256sum *.pem
-    e231300b2b023d34f4972a5b9bba2c189a91cbfc7f80ba8629d2918d77ef1480  letsencryptauthorityx3.pem
+    b6ffef8106f353f17760c87571330245487d3ac7a4d3865379029baa3de330e1  e5.pem
+    1429463d25654be735b6af5026b96ac989709b04a8107580bc5efcd8209ae72d  e6.pem
     177e1b8fc43b722b393f4200ff4d92e32deeffbb76fef5ee68d8f49c88cf9d32  lets-encrypt-r3.pem
+    29ee679fb573c905bf3538126de6893a9e20ebe1cf400c6df22e5d171c94f543  r10.pem
+    6c06a45850f93aa6e31f9388f956379d8b4fb7ffca5211b9bab4ad159bdfb7b9  r11.pem
+
     
 * An issue, we find in almost any pentest of OS environments are broken permissions. Therefor, run:
 
