@@ -48,7 +48,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
-
+from cryptography.hazmat.primitives.asymmetric.ec import ECDSA, EllipticCurvePublicKey, EllipticCurveSignatureAlgorithm
 from logger import Logger
 
 
@@ -69,17 +69,15 @@ def verify_cert_signature(cert: x509.Certificate, trusted_issuer_certs: list[x50
 
     for trusted_cert in trusted_issuer_certs:
         try:
-            issuer_public_key = trusted_cert.public_key()
-            if not isinstance(issuer_public_key, RSAPublicKey):
-                raise Exception('Key is not an RSA public key')
-            issuer_public_key.verify(
-                cert.signature,
-                cert.tbs_certificate_bytes,
-                padding.PKCS1v15(),
-                hashes.SHA256())
+            if cert.issuer == trusted_cert.subject:
+                trusted_cert.public_key().verify(
+                    cert.signature,
+                    cert.tbs_certificate_bytes,
+                    padding.PKCS1v15(),
+                    cert.signature_hash_algorithm)
+                l.log_msg(f"Verify cert against {trusted_cert.subject} was successful. That's fine.")
+                return True
 
-            l.log_msg(f"Verify cert against {trusted_cert.subject} was successful. That's fine.")
-            return True
         except InvalidSignature:
             l.log_msg(f"Verify cert against {trusted_cert.subject} failed.")
             pass
@@ -121,13 +119,15 @@ def has_sct(cert: x509.Certificate) -> bool:
         return False
 
 
-def print_cert(cert: x509.Certificate) -> None:
+def print_cert(cert: x509.Certificate, cert_descr="Certificate") -> None:
     """
     Print a x509.Certificate object.
     :param cert: The certificate to print.
+    :param cert_descr: An optional string description for the certificate. The default is "Certificate", but it
+        could be something other meaningful such as "Leaf certificate" or "Certificate that failed the check."
     """
 
-    print("+ Certificate:")
+    print(f"+ {cert_descr}:")
     print(f"  Serial number (hex): 0x{cert.serial_number:02x}")
     print(f"  Serial number (dec): {cert.serial_number}")
     print(f"  Subject            : {cert.subject}")
@@ -137,6 +137,7 @@ def print_cert(cert: x509.Certificate) -> None:
     print(f"  Signature Hashalgo : {cert.signature_hash_algorithm.name}")
     print(f"  Fingerprint        : %s" % get_cert_fingerprint_hex(cert))
     print(f"  Pre-certificate    : {is_pre_cert(cert)}")
+    print(f"  Python type        : %s" % type(cert.public_key()))
 
 
 def parse_cert_from_file(cert_file: str) -> x509.Certificate:
