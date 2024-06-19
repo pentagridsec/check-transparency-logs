@@ -52,7 +52,7 @@ Internal check
 
 * Obtain the certificates you trust and you use as trust anchors. Here, we use intermediate CA certificates, because we
   verify if a found certificate was signed by one of the trust anchors. If there is an intermediate certificate missing,
-  the signature verification will fail. The ``letsencryptauthorityx3.pem`` is expired, but you may still have some
+  the signature verification will fail. Some intermediate CAs are expired, but you may still have some
   certs, which have been signed by this certificate.
 
 ::
@@ -64,12 +64,14 @@ Internal check
     wget https://letsencrypt.org/certs/2024/e6.pem
     wget https://letsencrypt.org/certs/2024/r10.pem
     wget https://letsencrypt.org/certs/2024/r11.pem
+    wget https://letsencrypt.org/certs/letsencryptauthorityx3.pem
 
 * Check hashes:
 
 ::
    
     sha256sum *.pem
+    e231300b2b023d34f4972a5b9bba2c189a91cbfc7f80ba8629d2918d77ef1480  letsencryptauthorityx3.pem
     b6ffef8106f353f17760c87571330245487d3ac7a4d3865379029baa3de330e1  e5.pem
     1429463d25654be735b6af5026b96ac989709b04a8107580bc5efcd8209ae72d  e6.pem
     177e1b8fc43b722b393f4200ff4d92e32deeffbb76fef5ee68d8f49c88cf9d32  lets-encrypt-r3.pem
