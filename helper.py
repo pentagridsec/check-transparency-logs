@@ -39,16 +39,14 @@
 import os
 import socket
 import ssl
-from pathlib import Path
 from typing import Dict
-
 from cryptography import x509
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
-from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
-from cryptography.hazmat.primitives.asymmetric.ec import ECDSA, EllipticCurvePublicKey, EllipticCurveSignatureAlgorithm
+from cryptography.hazmat.primitives.asymmetric.ec import ECDSA, EllipticCurvePublicKey
+from cryptography.x509 import SignatureAlgorithmOID
 from logger import Logger
 
 
@@ -70,11 +68,24 @@ def verify_cert_signature(cert: x509.Certificate, trusted_issuer_certs: list[x50
     for trusted_cert in trusted_issuer_certs:
         try:
             if cert.issuer == trusted_cert.subject:
-                trusted_cert.public_key().verify(
-                    cert.signature,
-                    cert.tbs_certificate_bytes,
-                    padding.PKCS1v15(),
-                    cert.signature_hash_algorithm)
+                # In a more recent version, there is a verify_directly_issued_by() function,
+                # which would simplify the process here.
+                # So we have to adjust the code here, if necessary.
+
+                if cert.signature_algorithm_oid in [SignatureAlgorithmOID.ECDSA_WITH_SHA224,
+                                                    SignatureAlgorithmOID.ECDSA_WITH_SHA256,
+                                                    SignatureAlgorithmOID.ECDSA_WITH_SHA384,
+                                                    SignatureAlgorithmOID.ECDSA_WITH_SHA512]:
+                    trusted_cert.public_key().verify(
+                        cert.signature,
+                        cert.tbs_certificate_bytes,
+                        ECDSA(cert.signature_hash_algorithm) )
+                else:
+                    trusted_cert.public_key().verify(
+                        cert.signature,
+                        cert.tbs_certificate_bytes,
+                        padding.PKCS1v15(),
+                        cert.signature_hash_algorithm)
                 l.log_msg(f"Verify cert against {trusted_cert.subject} was successful. That's fine.")
                 return True
 
@@ -138,6 +149,9 @@ def print_cert(cert: x509.Certificate, cert_descr="Certificate") -> None:
     print(f"  Fingerprint        : %s" % get_cert_fingerprint_hex(cert))
     print(f"  Pre-certificate    : {is_pre_cert(cert)}")
     print(f"  Python type        : %s" % type(cert.public_key()))
+
+    if isinstance(cert.public_key(), EllipticCurvePublicKey):
+        print(f"  Curve              : %s" % cert.public_key().curve.name if cert.public_key().curve else "-")
 
 
 def parse_cert_from_file(cert_file: str) -> x509.Certificate:
