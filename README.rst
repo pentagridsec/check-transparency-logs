@@ -63,9 +63,13 @@ Internal check
     wget https://letsencrypt.org/certs/2024/e5.pem
     wget https://letsencrypt.org/certs/2024/e6.pem
     wget https://letsencrypt.org/certs/2024/e7.pem
+    wget https://letsencrypt.org/certs/2024/e8.pem
+    wget https://letsencrypt.org/certs/2024/e9.pem
     wget https://letsencrypt.org/certs/2024/r10.pem
     wget https://letsencrypt.org/certs/2024/r11.pem
     wget https://letsencrypt.org/certs/2024/r12.pem
+    wget https://letsencrypt.org/certs/2024/r13.pem
+    wget https://letsencrypt.org/certs/2024/r14.pem
     wget https://letsencrypt.org/certs/letsencryptauthorityx3.pem
 
 * Check hashes:
@@ -77,11 +81,15 @@ Internal check
     b6ffef8106f353f17760c87571330245487d3ac7a4d3865379029baa3de330e1  e5.pem
     1429463d25654be735b6af5026b96ac989709b04a8107580bc5efcd8209ae72d  e6.pem
     4625e2d4a1b9e1378b305a64577f80581b1a7ec88b8f4756bb86c56f9dceb79c  e7.pem
+    f2c0dde62e2c90e6332fa55af79ed1a0c41329ad03ecf812bd89817a2fc340a9  e8.pem
+    dcf876beaf4399c3d32b0b1d176febaa9763cad29e1a91b7b9a66a7c6f6b123a  e9.pem
     177e1b8fc43b722b393f4200ff4d92e32deeffbb76fef5ee68d8f49c88cf9d32  lets-encrypt-r3.pem
     29ee679fb573c905bf3538126de6893a9e20ebe1cf400c6df22e5d171c94f543  r10.pem
     6c06a45850f93aa6e31f9388f956379d8b4fb7ffca5211b9bab4ad159bdfb7b9  r11.pem
     c6afa726f611cd87bb3c7b743567221782655db4c4f47e7c64993d1bbdaae8f3  r12.pem
-    
+    6c595b12bcc415caa5ac38c60ad01414131a8b1944c21c7a0c5b1c97631968c9  r13.pem
+    0c830c96b727bd4b1f4e83e5babbee24b43b73dbe83d800adb699d9bc1e78404  r14.pem
+
 * An issue, we find in almost any pentest of OS environments are broken permissions. Therefor, run:
 
 ::
