@@ -233,7 +233,7 @@ def main():
     parser.add_argument('--verbose', help='Show more logging', action='store_true', default=False)
     parser.add_argument('--db', metavar='FILE', type=str, help='An Sqlite3 database file with known certificates, for which a decision was already made', default="known_certs.db")
     parser.add_argument('--local-certs', metavar='PATH', type=str, help='Local certificate file or a directory to check. These are the ACME-obtained certificates, for which we know they belong to us.')
-    parser.add_argument('--trusted-issuer-certs', metavar='FILE', type=str, help='Expected and trusted CA certificate(s) in a file or set of files.', nargs='+')
+    parser.add_argument('--trusted-issuer-certs', metavar='PATH', type=str, help='Expected and trusted CA certificate(s) in a file or set of files or in directories.', nargs='+')
     parser.add_argument('--learn', help='Runs checks on the certs, but learns certs as trusted, if they cannot be found locally. You may want to run in interactive mode, first.', action='store_true', default=False)
     parser.add_argument('--interactive', help='Interactive mode and ask what to do.', action='store_true', default=False)
 
@@ -259,7 +259,9 @@ def main():
         l.log_msg(f"Found certificate with serial {cert.serial_number}.")
 
     # load issuer CA certs
-    issuer_certs = [parse_cert_from_file(f) for f in args.trusted_issuer_certs]
+    issuer_certs = []
+    for f in args.trusted_issuer_certs:
+        issuer_certs.extend(parse_local_certs(f).values())
 
     db = Database(args.db)
 
